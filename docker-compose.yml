@@ -1,0 +1,23 @@
+# Run with `docker-compose up -d`
+# to unmount volume and reinitialize schema/data, run with `docker-compose up -v`
+version: '3.5'
+services:
+  local_db:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=service_dev
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=flyway_demo_db
+      - ENVIRONMENT=local
+      - POSTGRES_HOST=local_db
+    ports:
+      - 5432:5432
+    volumes:
+      - db_data:/var/lib/oracle
+    networks:
+      - flyway-demo
+networks:
+  flyway-demo:
+    name: flyway_demo_network
+volumes:
+  db_data:
