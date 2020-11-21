@@ -16,6 +16,17 @@ services:
       - db_data:/var/lib/oracle
     networks:
       - flyway-demo
+  # Image for flyway. Waits for the database to spin up, then applies migrations in all directories under the sql folder
+  flyway:
+    image: flyway/flyway
+    command: -connectRetries=60 -url=jdbc:postgresql://local_db/flyway_demo_db?useSSL=false -user=service_dev -password=password migrate
+    volumes:
+      - ./flyway/sql:/flyway/sql
+      - ./flyway/conf:/flyway/conf
+    depends_on:
+      - local_db
+    networks:
+      - flyway-demo
 networks:
   flyway-demo:
     name: flyway_demo_network
